@@ -3,6 +3,8 @@ package catalogoBibliografico;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,11 +19,6 @@ public class Archivio {
 	public static Logger logger = (Logger) LoggerFactory.getLogger(Archivio.class);
 	
 	private static File file = new File("archivio.txt");
-	
-
-	//save on file
-	//read from file
-	
 	
 	public static List<PubblicazioniCartacee> archivio = new ArrayList<PubblicazioniCartacee>();
 
@@ -59,6 +56,53 @@ public class Archivio {
 	    logger.info("RICERCA PER " + autore + ": {}", searched.toString());
 	    return null;
 	}
+	
+	public static void saveToDisk() throws IOException{
+		String space = "";
+		
+		for(PubblicazioniCartacee pubblicazione : archivio) {
+			if(space.length() !=0) {
+				space += ("#" + System.lineSeparator());
+			}
+			if(pubblicazione instanceof Libro) {
+				space += pubblicazione.toString();
+			} else if(pubblicazione instanceof Rivista) {
+				space += pubblicazione.toString();
+			}
+		}
+		
+		FileUtils.writeStringToFile(file, space, "UTF-8");
+		logger.info("FILE SCRITTO CORRETTAMENTE");
+	}
+
+	public static void readFromDisk(File file, List<PubblicazioniCartacee> archivio) throws IOException {
+	    String data = FileUtils.readFileToString(file, "UTF-8");
+	    String[] pubblicazioni = data.split("#");
+
+	    for (String pubblicazione : pubblicazioni) {
+	        String[] fields = pubblicazione.split(",");
+	        if (Arrays.asList(fields).contains("autore")) {
+	            long isbn = Integer.parseInt(fields[0]);
+	            String titolo = fields[1];
+	            int annoPubblicazione = Integer.parseInt(fields[2]);
+	            int pagine = Integer.parseInt(fields[3]);
+	            String autore = fields[4];
+	            String genere = fields[5];
+	            Libro pubblicazioneDaCreare = new Libro(isbn, titolo, annoPubblicazione, pagine, autore, genere);
+	            archivio.add(pubblicazioneDaCreare);
+	        } else if (Arrays.asList(fields).contains("periodicità")) {
+	        	 long isbn = Integer.parseInt(fields[0]);
+		         String titolo = fields[1];
+		         int annoPubblicazione = Integer.parseInt(fields[2]);
+		         int pagine = Integer.parseInt(fields[3]);
+		         String periodicità = fields[4];
+		         Rivista pubblicazioneDaCreare = new Rivista(isbn, titolo, annoPubblicazione, pagine, periodicità);
+		         archivio.add(pubblicazioneDaCreare);
+	        }
+	    }
+	    logger.info("FILE LETTO CORRETTAMENTE {}", archivio.toString());
+	}
+
 
 	public static void main(String[] args) {
 		
@@ -103,6 +147,15 @@ public class Archivio {
 			e.printStackTrace();
 		}
 		
+		//********** LETTURA DA DISCO **********
+		
+		try {
+			readFromDisk(file, archivio);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 		//********* ELIMINAZIONE ELEMENTO DA ARCHIVIO TRAMITE ISBN **********
 		
 		deleteDaISBN(9788806242626l);
@@ -120,21 +173,4 @@ public class Archivio {
 		searchDaISBN(9781447998396l);
 	}
 	
-	public static void saveToDisk() throws IOException{
-		String space = "";
-		
-		for(PubblicazioniCartacee pubblicazione : archivio) {
-			if(space.length() !=0) {
-				space += (System.lineSeparator());
-			}
-			if(pubblicazione instanceof Libro) {
-				space += pubblicazione.toString();
-			} else if(pubblicazione instanceof Rivista) {
-				space += pubblicazione.toString();
-			}
-		}
-		
-		FileUtils.writeStringToFile(file, space, "UTF-8");
-		logger.info("FILE SCRITTO CORRETTAMENTE");
-	}
 }
