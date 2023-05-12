@@ -95,7 +95,7 @@ public class Archivio {
 		         String titolo = fields[1];
 		         int annoPubblicazione = Integer.parseInt(fields[2]);
 		         int pagine = Integer.parseInt(fields[3]);
-		         String periodicità = fields[4];
+		         periodicità periodicità = catalogoBibliografico.periodicità.valueOf(fields[4]);
 		         Rivista pubblicazioneDaCreare = new Rivista(isbn, titolo, annoPubblicazione, pagine, periodicità);
 		         archivio.add(pubblicazioneDaCreare);
 	        }
@@ -116,11 +116,11 @@ public class Archivio {
 		
 		//********** CREAZIONE RIVISTE **********
 		
-		Rivista rivista1 = new Rivista(9781292110073l, "Focus", 1992, 150, "MENSILE");
-		Rivista rivista2 = new Rivista(9781292110080l, "Vogue", 1892, 250, "MENSILE");
-		Rivista rivista3 = new Rivista(9781447998396l, "TIME", 1923, 100, "SETTIMANALE");
-		Rivista rivista4 = new Rivista(9781292110110l, "Journal of Molecular Biology", 1959, 250, "SEMESTRALE");
-		Rivista rivista5 = new Rivista(9781447998617l, "Journal of Applied Physics ", 1931, 900, "SEMESTRALE");
+		Rivista rivista1 = new Rivista(9781292110073l, "Focus", 1992, 150, periodicità.MENSILE);
+		Rivista rivista2 = new Rivista(9781292110080l, "Vogue", 1892, 250, periodicità.MENSILE);
+		Rivista rivista3 = new Rivista(9781447998396l, "TIME", 1923, 100, periodicità.SETTIMANALE);
+		Rivista rivista4 = new Rivista(9781292110110l, "Journal of Molecular Biology", 1959, 250, periodicità.SEMESTRALE);
+		Rivista rivista5 = new Rivista(9781447998617l, "Journal of Applied Physics ", 1931, 900, periodicità.SEMESTRALE);
 		
 		
 		//********** AGGIUNTA ELEMENTO A ARCHIVIO **********

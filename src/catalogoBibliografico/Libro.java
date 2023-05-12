@@ -6,10 +6,7 @@ public class Libro extends PubblicazioniCartacee{
 	private String genere;
 
 	public Libro(long ISBN, String titolo, int annoPubblicazione, int pagine, String autore, String genere) {
-		this.ISBN = ISBN;
-		this.titolo = titolo;
-		this.annoPubblicazione = annoPubblicazione;
-		this.pagine = pagine;
+		super(ISBN, titolo, annoPubblicazione, pagine);
 		this.autore = autore;
 		this.genere = genere;
 	}

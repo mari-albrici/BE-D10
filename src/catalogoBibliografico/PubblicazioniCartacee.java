@@ -8,6 +8,13 @@ public abstract class PubblicazioniCartacee {
 	protected int pagine;
 	
 	
+	protected PubblicazioniCartacee(long ISBN, String titolo, int annoPubblicazione, int pagine) {
+		this.ISBN = ISBN;
+		this.titolo = titolo;
+		this.annoPubblicazione = annoPubblicazione;
+		this.pagine = pagine;
+	}
+	
 	protected String getTitolo() {
 		return titolo;
 	}
@@ -22,12 +29,6 @@ public abstract class PubblicazioniCartacee {
 	
 	protected long getISBN() {
 		return ISBN;
-	}
-	
-	public void addLibro(Libro nomePubblicazione) {
-	}
-	
-	public void addRivista(Rivista nomePubblicazione) {	
 	}
 	
 	@Override

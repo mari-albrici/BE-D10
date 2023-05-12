@@ -2,13 +2,10 @@ package catalogoBibliografico;
 
 public class Rivista extends PubblicazioniCartacee{
 	
-	private String periodicità;
+	private periodicità periodicità;;
 	
-	public Rivista(long ISBN, String titolo, int annoPubblicazione, int pagine, String periodicità) {
-		this.ISBN = ISBN;
-		this.titolo = titolo;
-		this.annoPubblicazione = annoPubblicazione;
-		this.pagine = pagine;
+	public Rivista(long ISBN, String titolo, int annoPubblicazione, int pagine, periodicità periodicità) {
+		super(ISBN, titolo, annoPubblicazione, pagine);
 		this.periodicità = periodicità;
 	}
 
@@ -16,7 +13,7 @@ public class Rivista extends PubblicazioniCartacee{
 		System.out.println(titolo + ", pubblicato nel " + annoPubblicazione + " " + periodicità + ", ha un totale di" + pagine + " pagine (il suo codice ISBN è: " + ISBN + ").");
 	}
 	
-	public String getPeriodicità() {
+	public periodicità getPeriodicità() {
 		return periodicità;
 	}
 	
