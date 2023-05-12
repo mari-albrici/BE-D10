@@ -2,6 +2,7 @@ package catalogoBibliografico;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.slf4j.LoggerFactory;
@@ -30,29 +31,22 @@ public class Archivio {
 		archivio.removeIf(pubblicazione -> pubblicazione.getISBN() == ISBNPubblicazione);
 	}
 	
-	public static void searchDaISBN(long ISBNPubblicazione) {
-		archivio.stream().filter(pubblicazione -> pubblicazione.getISBN() == ISBNPubblicazione);
+	public static List<PubblicazioniCartacee> searchDaISBN(long ISBNPubblicazione) {
+		List<PubblicazioniCartacee> searched = archivio.stream().filter(pubblicazione -> (pubblicazione).getISBN() == ISBNPubblicazione).collect(Collectors.toList());
+		logger.info("RICERCA PER " + ISBNPubblicazione + ": {}", searched.toString());
+		return null;
+	}
+	
+	public static List<PubblicazioniCartacee> searchDaAnno(int annoPubblicazione) {
+		List<PubblicazioniCartacee> searched = archivio.stream().filter(pubblicazione -> pubblicazione.getAnnoPubblicazione() == annoPubblicazione).collect(Collectors.toList());
+		logger.info("RICERCA PER " + annoPubblicazione + ": {}", searched.toString());
+		return null;
 	}
 	
 	
 	public static List<PubblicazioniCartacee> searchDaAutore(String autore) {
-		for(PubblicazioniCartacee pubblicazione : archivio) {
-			if(((Libro) pubblicazione).getAutore() == autore) {
-				logger.info("RICERCA PER " + autore + ": {}", pubblicazione.toString());
-			}
-		}
-		return null;
-	}
-	
-
-	public static List<PubblicazioniCartacee> searchDaAnno(int annoPubblicazione) {
-		for(PubblicazioniCartacee pubblicazione : archivio) {
-			if(pubblicazione.getAnnoPubblicazione() == annoPubblicazione) {
-				logger.info("RICERCA PER " + annoPubblicazione + ": {}", pubblicazione.toString());
-			} else {
-				logger.info("Nessuna pubblicazione trovata per l'anno " + annoPubblicazione);
-			}
-		}
+		List<PubblicazioniCartacee> searched = archivio.stream().filter(pubblicazione -> ((Libro) pubblicazione).getAutore() == autore).collect(Collectors.toList());
+		logger.info("RICERCA PER " + autore + ": {}", searched.toString());
 		return null;
 	}
 
