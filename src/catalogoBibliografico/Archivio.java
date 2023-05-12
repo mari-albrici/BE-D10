@@ -1,19 +1,22 @@
 package catalogoBibliografico;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 
-import catalogoBibliografico.PubblicazioniCartacee;
 
 public class Archivio {
 	
 	public static Logger logger = (Logger) LoggerFactory.getLogger(Archivio.class);
+	
+	private static File file = new File("archivio.txt");
 	
 
 	//save on file
@@ -32,22 +35,29 @@ public class Archivio {
 	}
 	
 	public static List<PubblicazioniCartacee> searchDaISBN(long ISBNPubblicazione) {
-		List<PubblicazioniCartacee> searched = archivio.stream().filter(pubblicazione -> (pubblicazione).getISBN() == ISBNPubblicazione).collect(Collectors.toList());
+		List<PubblicazioniCartacee> searched = archivio.stream()
+														.filter(pubblicazione -> (pubblicazione).getISBN() == ISBNPubblicazione)
+														.collect(Collectors.toList());
 		logger.info("RICERCA PER " + ISBNPubblicazione + ": {}", searched.toString());
 		return null;
 	}
 	
 	public static List<PubblicazioniCartacee> searchDaAnno(int annoPubblicazione) {
-		List<PubblicazioniCartacee> searched = archivio.stream().filter(pubblicazione -> pubblicazione.getAnnoPubblicazione() == annoPubblicazione).collect(Collectors.toList());
+		List<PubblicazioniCartacee> searched = archivio.stream()
+														.filter(pubblicazione -> pubblicazione.getAnnoPubblicazione() == annoPubblicazione)
+														.collect(Collectors.toList());
 		logger.info("RICERCA PER " + annoPubblicazione + ": {}", searched.toString());
 		return null;
 	}
 	
 	
-	public static List<PubblicazioniCartacee> searchDaAutore(String autore) {
-		List<PubblicazioniCartacee> searched = archivio.stream().filter(pubblicazione -> ((Libro) pubblicazione).getAutore() == autore).collect(Collectors.toList());
-		logger.info("RICERCA PER " + autore + ": {}", searched.toString());
-		return null;
+	public static List<Libro> searchDaAutore(String autore) {
+	    List<Libro> searched = archivio.stream()
+	                                    .filter(pubblicazione -> pubblicazione instanceof Libro && ((Libro) pubblicazione).getAutore().equals(autore))
+	                                    .map(p -> (Libro) p)
+	                                    .collect(Collectors.toList());
+	    logger.info("RICERCA PER " + autore + ": {}", searched.toString());
+	    return null;
 	}
 
 	public static void main(String[] args) {
@@ -84,9 +94,18 @@ public class Archivio {
 		addPubblicazione(rivista5);
 		
 		
+		//********** SCRITTURA SU DISCO **********
+		
+		try {
+			saveToDisk();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		//********* ELIMINAZIONE ELEMENTO DA ARCHIVIO TRAMITE ISBN **********
 		
-//		deleteDaISBN(9788806242626l);
+		deleteDaISBN(9788806242626l);
 		
 		//********** RICERCA PER AUTORE *********
 		
@@ -96,8 +115,26 @@ public class Archivio {
 		
 		searchDaAnno(2023);
 		
+		//********** RICERCA PER ISBN **********
+		
+		searchDaISBN(9781447998396l);
 	}
 	
-	
-
+	public static void saveToDisk() throws IOException{
+		String space = "";
+		
+		for(PubblicazioniCartacee pubblicazione : archivio) {
+			if(space.length() !=0) {
+				space += (System.lineSeparator());
+			}
+			if(pubblicazione instanceof Libro) {
+				space += pubblicazione.toString();
+			} else if(pubblicazione instanceof Rivista) {
+				space += pubblicazione.toString();
+			}
+		}
+		
+		FileUtils.writeStringToFile(file, space, "UTF-8");
+		logger.info("FILE SCRITTO CORRETTAMENTE");
+	}
 }
