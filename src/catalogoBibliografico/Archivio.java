@@ -2,6 +2,7 @@ package catalogoBibliografico;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.slf4j.LoggerFactory;
 
@@ -13,25 +14,47 @@ public class Archivio {
 	
 	public static Logger logger = (Logger) LoggerFactory.getLogger(Archivio.class);
 	
-	//add
-	//remove by ISBN
-	//search by ISBN
-	//search by Year
-	//search by author
+
 	//save on file
 	//read from file
 	
+	
 	public static List<PubblicazioniCartacee> archivio = new ArrayList<PubblicazioniCartacee>();
+
 	
 	public static void addPubblicazione(PubblicazioniCartacee nomePubblicazione) {
 		archivio.add(nomePubblicazione);
 	}
-	
+
 	public static void deleteDaISBN(long ISBNPubblicazione) {
 		archivio.removeIf(pubblicazione -> pubblicazione.getISBN() == ISBNPubblicazione);
 	}
 	
+	public static void searchDaISBN(long ISBNPubblicazione) {
+		archivio.stream().filter(pubblicazione -> pubblicazione.getISBN() == ISBNPubblicazione);
+	}
+	
+	
+	public static List<PubblicazioniCartacee> searchDaAutore(String autore) {
+		for(PubblicazioniCartacee pubblicazione : archivio) {
+			if(((Libro) pubblicazione).getAutore() == autore) {
+				logger.info("RICERCA PER " + autore + ": {}", pubblicazione.toString());
+			}
+		}
+		return null;
+	}
+	
 
+	public static List<PubblicazioniCartacee> searchDaAnno(int annoPubblicazione) {
+		for(PubblicazioniCartacee pubblicazione : archivio) {
+			if(pubblicazione.getAnnoPubblicazione() == annoPubblicazione) {
+				logger.info("RICERCA PER " + annoPubblicazione + ": {}", pubblicazione.toString());
+			} else {
+				logger.info("Nessuna pubblicazione trovata per l'anno " + annoPubblicazione);
+			}
+		}
+		return null;
+	}
 
 	public static void main(String[] args) {
 		
@@ -57,16 +80,27 @@ public class Archivio {
 		addPubblicazione(libro1);
 		addPubblicazione(libro2);
 		addPubblicazione(libro3);
+		addPubblicazione(libro4);
+		addPubblicazione(libro5);
 		
 		addPubblicazione(rivista1);
 		addPubblicazione(rivista2);
+		addPubblicazione(rivista3);
+		addPubblicazione(rivista4);
+		addPubblicazione(rivista5);
 		
 		
 		//********* ELIMINAZIONE ELEMENTO DA ARCHIVIO TRAMITE ISBN **********
 		
-		deleteDaISBN(9788806242626l);
+//		deleteDaISBN(9788806242626l);
 		
-
+		//********** RICERCA PER AUTORE *********
+		
+		searchDaAutore("Barbascura X");
+		
+		//********** RICERCA PER ANNO *********
+		
+		searchDaAnno(2023);
 		
 	}
 	

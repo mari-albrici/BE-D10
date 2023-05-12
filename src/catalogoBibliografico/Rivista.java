@@ -19,4 +19,9 @@ public class Rivista extends PubblicazioniCartacee{
 	public String getPeriodicità() {
 		return periodicità;
 	}
+	
+	@Override
+    public String toString() {
+        return super.toString() + ", Periodicità " + periodicità ;
+    }
 }

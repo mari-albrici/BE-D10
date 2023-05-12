@@ -25,4 +25,9 @@ public class Libro extends PubblicazioniCartacee{
 	public String getGenere() {
 		return genere;
 	}
+	
+	@Override
+    public String toString() {
+        return super.toString() + ", Autore: " + autore + ", Genere: " + genere;
+    }
 }

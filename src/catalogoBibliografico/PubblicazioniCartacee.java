@@ -30,5 +30,9 @@ public abstract class PubblicazioniCartacee {
 	public void addRivista(Rivista nomePubblicazione) {	
 	}
 	
+	@Override
+    public String toString() {
+        return "ISBN: " + ISBN + ", Titolo: " + titolo + ", Anno di pubblicazione: " + annoPubblicazione + ", Pagine: " + pagine;
+    }
 	
 }
